@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Agenda de Actividades</title>
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <h1>Agenda de Actividades</h1>
+
+    <form action="{{ url_for('agregar') }}" method="POST">
+        <label>Título:</label>
+        <input type="text" name="titulo"
+        placeholder="Ej. Tarea de IA" required>
+
+        <label>Descripción:</label>
+        <input type="text" name="descripcion"
+        placeholder="Ej. Investigar sobre Flask">
+
+        <label>Fecha:</label>
+        <input type="date" name="fecha" required>
+
+        <button type="submit">Guardar actividad</button>
+    </form>
+
+    <h2>Lista de actividades</h2>
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Título</th>
+            <th>Descripción</th>
+            <th>Fecha</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+
+        {% for actividad in actividades %}
+        <tr>
+            <td>{{ actividad['id'] }}</td>
+            <td>{{ actividad['titulo'] }}</td>
+            <td>{{ actividad['descripcion'] }}</td>
+            <td>{{ actividad['fecha'] }}</td>
+
+            <td>
+                {% if actividad['completada'] == 1 %}
+                    Completada
+                {% else %}
+                    Pendiente
+                {% endif %}
+            </td>
+
+            <td>
+                <a href="{{ url_for('editar',
+                id=actividad['id']) }}">Editar</a>
+
+                <a href="{{ url_for('eliminar',
+                id=actividad['id']) }}"
+                onclick="return confirm('¿Eliminar actividad?')">
+                    Eliminar
+                </a>
+
+                <a href="{{ url_for('completar',
+                id=actividad['id']) }}">
+                    Cambiar estado
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</body>
+</html>
